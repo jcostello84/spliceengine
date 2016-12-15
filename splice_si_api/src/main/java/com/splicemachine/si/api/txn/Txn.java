@@ -65,6 +65,11 @@ public interface Txn extends TxnView{
         }
 
         @Override
+        public boolean allowsSubtransactions() {
+            return false;
+        }
+
+        @Override
         public long getBeginTimestamp(){
             return 0;
         }

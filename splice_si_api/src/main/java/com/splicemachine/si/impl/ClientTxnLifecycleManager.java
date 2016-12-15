@@ -104,13 +104,14 @@ public class ClientTxnLifecycleManager implements TxnLifecycleManager{
         if(parentTxn.getState()!=Txn.State.ACTIVE)
             throw exceptionFactory.doNotRetry("Cannot create a child of an inactive transaction. Parent: "+parentTxn);
         if(destinationTable!=null){
-            if (parentTxn instanceof Txn && !Txn.ROOT_TRANSACTION.equals(parentTxn)) {
+            if (parentTxn.allowsSubtransactions()) {
                 Txn parent = (Txn) parentTxn;
-                return createWritableTransaction(parent.getBeginTimestamp(), parent.newSubId(), parent, isolationLevel, additive, parentTxn, destinationTable);
-            } else {
-                long timestamp = timestampSource.nextTimestamp();
-                return createWritableTransaction(timestamp, 0, null, isolationLevel, additive, parentTxn, destinationTable);
+                long subId = parent.newSubId();
+                if (subId < 0xFF)
+                    return createWritableTransaction(parent.getBeginTimestamp(), subId, parent, isolationLevel, additive, parentTxn, destinationTable);
             }
+            long timestamp = timestampSource.nextTimestamp();
+            return createWritableTransaction(timestamp, 0, null, isolationLevel, additive, parentTxn, destinationTable);
         }else
             return createReadableTransaction(isolationLevel,additive,parentTxn);
     }

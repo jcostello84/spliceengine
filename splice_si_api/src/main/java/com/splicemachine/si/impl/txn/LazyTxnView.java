@@ -116,6 +116,11 @@ public class LazyTxnView implements TxnView {
     }
 
     @Override
+    public boolean allowsSubtransactions() {
+        return false;
+    }
+
+    @Override
     public int getSubId() {
         return (int)(txnId & 0xFF);
     }

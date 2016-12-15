@@ -102,4 +102,14 @@ public abstract class AbstractTxn extends AbstractTxnView implements Txn {
             return parentRoot.getRolledback();
         }
     }
+
+    @Override
+    public boolean allowsSubtransactions() {
+        for (Txn c : children) {
+            if (c.getState() == State.ACTIVE) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

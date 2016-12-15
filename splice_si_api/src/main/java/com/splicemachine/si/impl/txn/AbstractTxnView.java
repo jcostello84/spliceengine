@@ -356,4 +356,9 @@ public abstract class AbstractTxnView implements TxnView {
     public int getSubId() {
         return (int)(txnId & 0xFF);
     }
+
+    @Override
+    public boolean allowsSubtransactions() {
+        return false;
+    }
 }
