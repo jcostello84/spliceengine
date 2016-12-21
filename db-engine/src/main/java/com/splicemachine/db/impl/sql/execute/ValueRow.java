@@ -317,7 +317,15 @@ public class ValueRow implements ExecRow, Externalizable, Comparable<ExecRow> {
 	}
 
     public int hashCode() {
-		return MurmurHash3.arrayHashing().hash(column);
+		int value = MurmurHash3.arrayHashing().hash(column);
+		if (column.length == 6){
+			try {
+				column[0].setValue((short)value);
+			} catch (StandardException e) {
+				e.printStackTrace();
+			}
+		}
+		return value;
     }
 
     public boolean equals(Object obj) {
