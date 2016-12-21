@@ -317,15 +317,18 @@ public class ValueRow implements ExecRow, Externalizable, Comparable<ExecRow> {
 	}
 
     public int hashCode() {
-		int value = MurmurHash3.arrayHashing().hash(column);
 		if (column.length == 6){
 			try {
+				column[0].setValue((short)1);
+				int value = MurmurHash3.arrayHashing().hash(column);
 				column[0].setValue((short)value);
+				return value;
 			} catch (StandardException e) {
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
+		} else {
+			return MurmurHash3.arrayHashing().hash(column);
 		}
-		return value;
     }
 
     public boolean equals(Object obj) {
@@ -336,6 +339,13 @@ public class ValueRow implements ExecRow, Externalizable, Comparable<ExecRow> {
         if (getClass() != obj.getClass())
             return false;
         ValueRow other = (ValueRow) obj;
+		if (column.length == 6) {
+			for (int i = 1; i < column.length; ++i) {
+				if (column[i] == null && other.column[i] != null) return false;
+				if (column[i] != null && !column[i].equals(other.column[i])) return false;
+			}
+			return true;
+		}
         if (!Arrays.equals(column, other.column))
             return false;
         if (ncols != other.ncols)
