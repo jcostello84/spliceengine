@@ -329,6 +329,7 @@ public class ValueRow implements ExecRow, Externalizable, Comparable<ExecRow> {
 					int value = MurmurHash3.arrayHashing().hash(column);
 					if (old != value)
 						System.out.println("Inconsistency!! " + this + " old " + old + " new " + value);
+					column[5].setValue(old);
 					return value;
 				}
 			} catch (StandardException e) {
