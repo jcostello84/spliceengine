@@ -107,6 +107,7 @@ public class ValueRow implements ExecRow, Externalizable, Comparable<ExecRow> {
         try {
             column[position-1] = col;
         } catch (Exception e) {
+			e.printStackTrace();
             realloc(position);
             column[position-1] = col;
         }
