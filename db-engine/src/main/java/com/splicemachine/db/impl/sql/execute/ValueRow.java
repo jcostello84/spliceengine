@@ -35,6 +35,7 @@ import com.splicemachine.db.iapi.error.StandardException;
 import com.splicemachine.db.iapi.services.io.FormatableBitSet;
 import com.splicemachine.db.iapi.sql.execute.ExecRow;
 import com.splicemachine.db.iapi.types.DataValueDescriptor;
+import org.apache.hadoop.hbase.util.Bytes;
 import scala.util.hashing.MurmurHash3;
 
 /**
@@ -323,6 +324,23 @@ public class ValueRow implements ExecRow, Externalizable, Comparable<ExecRow> {
 				int old = column[5].getInt();
 				if (old == 1) {
 					int value = MurmurHash3.arrayHashing().hash(column);
+					if (!column[4].isNull() || column[4].getString() != null) {
+						switch (value) {
+							case 1808374043:
+							case -877674520:
+							case 706926925:
+							case -1143243600:
+							case -775842574:
+							case 1114051188:
+								System.out.println("Inconsistency " + column[4]);
+								System.out.println("Class " + column[4].getClass());
+								System.out.println("Hashcode " + column[4].hashCode());
+								System.out.println("String " + column[4].getString());
+								System.out.println("Bytes " + Bytes.toHex(Bytes.toBytes(column[4].getString())));
+								break;
+							default:
+						}
+					}
 					column[5].setValue(value);
 					return value;
 				} else {
