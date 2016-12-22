@@ -324,7 +324,8 @@ public class ValueRow implements ExecRow, Externalizable, Comparable<ExecRow> {
 				int old = column[5].getInt();
 				if (old == 1) {
 					int value = MurmurHash3.arrayHashing().hash(column);
-					if (!column[4].isNull() || column[4].getString() != null) {
+					boolean isNull =column[4].isNull();
+					if (!isNull || column[4].getString() != null) {
 						switch (value) {
 							case 1808374043:
 							case -877674520:
@@ -332,11 +333,17 @@ public class ValueRow implements ExecRow, Externalizable, Comparable<ExecRow> {
 							case -1143243600:
 							case -775842574:
 							case 1114051188:
-								System.out.println("Inconsistency " + column[4]);
-								System.out.println("Class " + column[4].getClass());
-								System.out.println("Hashcode " + column[4].hashCode());
-								System.out.println("String " + column[4].getString());
-								System.out.println("Bytes " + Bytes.toHex(Bytes.toBytes(column[4].getString())));
+								DataValueDescriptor dvd = column[4];
+								System.out.println("Class " + dvd.getClass());
+								System.out.println("IsNull " + isNull);
+								System.out.println("IsNull2 " + dvd.isNull());
+								System.out.println("Inconsistency " + dvd);
+								System.out.println("Hashcode " + dvd.hashCode());
+								System.out.println("String " + dvd.getString());
+								System.out.println("TypeName " + dvd.getTypeName());
+								System.out.println("HasStream " + dvd.hasStream());
+								System.out.println("Length " + dvd.getLength());
+								System.out.println("Bytes " + Bytes.toHex(Bytes.toBytes(dvd.getString())));
 								break;
 							default:
 						}
