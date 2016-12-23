@@ -333,13 +333,19 @@ public class ValueRow implements ExecRow, Externalizable, Comparable<ExecRow> {
 							case -1143243600:
 							case -775842574:
 							case 1114051188:
+								int value2 = MurmurHash3.arrayHashing().hash(column);
+								System.out.println("value2 " + value2);
 								DataValueDescriptor dvd = column[4];
 								System.out.println("Class " + dvd.getClass());
 								System.out.println("IsNull " + isNull);
 								System.out.println("IsNull2 " + dvd.isNull());
 								System.out.println("Inconsistency " + dvd);
 								System.out.println("Hashcode " + dvd.hashCode());
+								int value3 = MurmurHash3.arrayHashing().hash(column);
+								System.out.println("value2 " + value3);
 								System.out.println("String " + dvd.getString());
+								int value4 = MurmurHash3.arrayHashing().hash(column);
+								System.out.println("value2 " + value4);
 								System.out.println("TypeName " + dvd.getTypeName());
 								System.out.println("HasStream " + dvd.hasStream());
 								System.out.println("Length " + dvd.getLength());
