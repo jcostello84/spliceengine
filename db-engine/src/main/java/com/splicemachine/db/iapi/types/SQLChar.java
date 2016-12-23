@@ -3087,7 +3087,7 @@ public class SQLChar
         try {
             if (getString() == null)
             {
-                return 0;
+                return -1;
             }
         }
         catch (StandardException se)
