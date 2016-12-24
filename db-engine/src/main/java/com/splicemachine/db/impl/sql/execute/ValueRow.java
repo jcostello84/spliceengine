@@ -27,14 +27,17 @@ package com.splicemachine.db.impl.sql.execute;
 
 import java.io.Externalizable;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.sql.Clob;
 import java.util.Arrays;
 
 import com.splicemachine.db.iapi.error.StandardException;
 import com.splicemachine.db.iapi.services.io.FormatableBitSet;
 import com.splicemachine.db.iapi.sql.execute.ExecRow;
 import com.splicemachine.db.iapi.types.DataValueDescriptor;
+import com.splicemachine.db.iapi.types.SQLChar;
 import org.apache.hadoop.hbase.util.Bytes;
 import scala.util.hashing.MurmurHash3;
 
@@ -323,9 +326,16 @@ public class ValueRow implements ExecRow, Externalizable, Comparable<ExecRow> {
 			try {
 				int old = column[5].getInt();
 				if (old == 1) {
+					SQLChar dvd = (SQLChar) column[4];
+					boolean fIsNull = dvd.isNull();
+					int fLen = dvd.rawLength;
+					String fValue = dvd.value;
+					Clob fClob = dvd._clobValue;
+					InputStream fStream = dvd.stream;
+
 					int value = MurmurHash3.arrayHashing().hash(column);
-					boolean isNull =column[4].isNull();
-					if (!isNull || column[4].getString() != null) {
+					boolean isNull = dvd.isNull();
+					if (!isNull || dvd.getString() != null) {
 						switch (value) {
 							case 1808374043:
 							case -877674520:
@@ -333,9 +343,27 @@ public class ValueRow implements ExecRow, Externalizable, Comparable<ExecRow> {
 							case -1143243600:
 							case -775842574:
 							case 1114051188:
+								System.out.println("fvalue " + fValue);
+								System.out.println("fIsNull " + fIsNull);
+								System.out.println("fLen " + fLen);
+								System.out.println("fClob " + fClob);
+								System.out.println("fStream " + fStream);
+								System.out.println("fStream class " + fStream.getClass());
+
 								int value2 = MurmurHash3.arrayHashing().hash(column);
+								 fIsNull = dvd.isNull();
+								 fLen = dvd.rawLength;
+								 fValue = dvd.value;
+								 fClob = dvd._clobValue;
+								 fStream = dvd.stream;
+								System.out.println("fvalue " + fValue);
+								System.out.println("fIsNull " + fIsNull);
+								System.out.println("fLen " + fLen);
+								System.out.println("fClob " + fClob);
+								System.out.println("fStream " + fStream);
+								System.out.println("fStream class " + fStream.getClass());
+
 								System.out.println("value2 " + value2);
-								DataValueDescriptor dvd = column[4];
 								System.out.println("Class " + dvd.getClass());
 								System.out.println("IsNull " + isNull);
 								System.out.println("IsNull2 " + dvd.isNull());
