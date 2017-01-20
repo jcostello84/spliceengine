@@ -122,7 +122,14 @@ public class CoprocessorTxnStore implements TxnStore {
 
     @Override
     public void rollbackSubtransactions(long txnId, LongOpenHashSet subtransactions) throws IOException {
-        // TODO
+        byte[] rowKey=getTransactionRowKey(txnId);
+        TxnMessage.TxnLifecycleMessage lifecycle=TxnMessage.TxnLifecycleMessage.newBuilder()
+                .setTxnId(txnId).addAllRolledbackSubTxns(Longs.asList(subtransactions.toArray()))
+                .setAction(TxnMessage.LifecycleAction.ROLLBACK_SUBTRANSACTIONS).build();
+        try(TxnNetworkLayer table = tableFactory.accessTxnNetwork()){
+            table.lifecycleAction(rowKey,lifecycle);
+            rollbacks.incrementAndGet();
+        }
     }
 
     @Override
@@ -232,7 +239,7 @@ public class CoprocessorTxnStore implements TxnStore {
     @Override
     public TxnView getTransaction(long txnId,boolean getDestinationTables) throws IOException{
         lookups.incrementAndGet(); //we are performing a lookup, so increment the counter
-        byte[] rowKey=getTransactionRowKey(txnId);
+        byte[] rowKey=getTransactionRowKey(txnId );
         TxnMessage.TxnRequest request=TxnMessage.TxnRequest.newBuilder().setTxnId(txnId).build();
 
         try (TxnNetworkLayer table = tableFactory.accessTxnNetwork()){
