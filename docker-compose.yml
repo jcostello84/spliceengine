@@ -1,0 +1,17 @@
+version: '2'
+services:
+    base-java:
+        build: 
+            context: splice_machine_docker/base_java/
+        image: base-java:latest
+    base-mvn:
+        build: 
+            context: splice_machine_docker/base_mvn/
+        image: base-mvn:latest
+    splice-app:
+        build: 
+            context: .
+            dockerfile: splice_machine_docker/splice_app/Dockerfile
+        volumes:
+            - ./:spliceengine
+        image: splice-app:latest
