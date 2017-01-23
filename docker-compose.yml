@@ -8,10 +8,14 @@ services:
         build: 
             context: splice_machine_docker/base_mvn/
         image: base-mvn:latest
+        depends_on: 
+           - "base-java"
     splice-app:
         build: 
             context: .
             dockerfile: splice_machine_docker/splice_app/Dockerfile
+        depends_on: 
+            - "base-mvn"
         volumes:
             - ./:spliceengine
         image: splice-app:latest

@@ -4,8 +4,8 @@ FROM base-java
 ENV MAVEN_VERSION="3.3.9" \
     M2_HOME=/usr/lib/mvn
 
-# Install git, bash, Maven
-RUN apk add --update bash bash-doc bash-completion git && \
+# Install git, bash, Maven, protobuf
+RUN apk add --update bash bash-doc bash-completion protobuf git && \
   cd /tmp && \
   wget "http://ftp.unicamp.br/pub/apache/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" && \
   tar -zxvf "apache-maven-$MAVEN_VERSION-bin.tar.gz" && \
