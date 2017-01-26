@@ -1,4 +1,4 @@
-FROM frolvlad/alpine-glibc:alpine-3.3
+FROM frolvlad/alpine-glibc:alpine-3.5
 
 # Setting environmental vaiables.
 ENV JAVA_VERSION=8 \
