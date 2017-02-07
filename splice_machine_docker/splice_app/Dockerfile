@@ -1,4 +1,4 @@
-FROM base-mvn
+FROM base-protobuf
 
 # Adding the repo into the container.
 ADD ./ spliceengine/

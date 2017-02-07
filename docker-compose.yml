@@ -10,12 +10,18 @@ services:
         image: base-mvn:latest
         depends_on: 
            - "base-java"
+    base-protobuf:
+        build: 
+            context: splice_machine_docker/base_protobuf/
+        image: base-protobuf:latest
+        depends_on: 
+           - "base-mvn"
     splice-app:
         build: 
             context: .
             dockerfile: splice_machine_docker/splice_app/Dockerfile
         depends_on: 
-            - "base-mvn"
+            - "base-protobuf"
         volumes:
             - ./:spliceengine
         image: splice-app:latest
